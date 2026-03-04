@@ -1,6 +1,6 @@
 # Finance and Crypto investor
 
-Fetch crypto ticker data and export as csv file. Library and standalone script.
+Fetch cryptocurrency ticker data and export as csv file. Library and standalone script.
 
 Run
 
@@ -38,6 +38,22 @@ func main(){
 	k_save_err := crypto_kraken.ExportCSV("./data/kraken_export.csv", kraken_tickers)
 	if k_save_err != nil {
 		log.Fatalf("export csv error: %s", k_save_err)
+	}
+}
+```
+
+```go
+func main(){
+    //fetch
+	sentiment, err := stock_sentiment.FetchSentiment()
+	if err != nil {
+		log.Fatalf("error fetching ticker data: %s", err)
+	}
+
+	//export to csv
+	err := stock_sentiment.ExportCSV("./data/reddit_sentiment.csv", sentiment)
+	if err != nil {
+		log.Fatalf("export csv error: %s", err)
 	}
 }
 ```

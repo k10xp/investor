@@ -6,12 +6,13 @@ import (
 
 	"github.com/k10xp/investor/crypto_coinpaprika"
 	"github.com/k10xp/investor/crypto_kraken"
+	"github.com/k10xp/investor/stock_sentiment"
 )
 
 func main() {
 	//setup go routine
 	var wg sync.WaitGroup
-	errChan := make(chan error, 2)
+	errChan := make(chan error, 3)
 
 	//CoinPaprika
 	wg.Add(1)
@@ -44,6 +45,23 @@ func main() {
 
 		if err := crypto_kraken.ExportCSV("./data/kraken_export.csv", tickers); err != nil {
 			errChan <- err
+		}
+	}()
+
+	//stock sentiment
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		sentiment, err := stock_sentiment.FetchSentiment()
+		if err != nil {
+			errChan <- err
+			return
+		}
+
+		if err := stock_sentiment.ExportCSV("./data/reddit_sentiment.csv", sentiment); err != nil {
+			errChan <- err
+			return
 		}
 	}()
 
