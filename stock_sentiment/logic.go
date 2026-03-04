@@ -1,6 +1,7 @@
 package stock_sentiment
 
 import (
+	"crypto/tls"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -12,7 +13,13 @@ import (
 func FetchSentiment() ([]RedditStock, error) {
 	url := "https://api.tradestie.com/v1/apps/reddit" //?date default to today
 
-	resp, err := http.Get(url)
+	//certificate expired, temp workaround to skip TLS verification
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+
+	resp, err := client.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
