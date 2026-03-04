@@ -11,7 +11,7 @@ func main() {
 	url := "https://api.coinpaprika.com/v1/tickers?quotes=USD"
 	tickers, err := crypto.FetchTickers(url)
 	if err != nil {
-		log.Fatal("error fetching ticker data")
+		log.Fatalf("error fetching ticker data: %s", err)
 	}
 
 	//top 5 entries
@@ -19,6 +19,12 @@ func main() {
 		if i >= 5 {
 			break
 		}
-		fmt.Printf("%d. %s (%s): $%.2f\n", t.Rank, t.Name, t.Symbol, t.Quotes.USD.Price)
+		_, _ = fmt.Printf("%d. %s (%s): $%.2f\n", t.Rank, t.Name, t.Symbol, t.Quotes.USD.Price)
+	}
+
+	//export to csv
+	err1 := crypto.ExportCSV("./data/coinpaprika_export.csv", tickers)
+	if err1 != nil {
+		log.Fatalf("export csv error: %s", err1)
 	}
 }
