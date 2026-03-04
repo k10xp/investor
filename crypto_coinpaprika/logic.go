@@ -1,4 +1,4 @@
-package crypto
+package crypto_coinpaprika
 
 import (
 	"encoding/csv"
@@ -9,7 +9,9 @@ import (
 	"strconv"
 )
 
-func FetchTickers(url string) ([]Ticker, error) {
+func FetchTickers() ([]Ticker, error) {
+	url := "https://api.coinpaprika.com/v1/tickers?quotes=USD"
+
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err

@@ -1,4 +1,4 @@
-package crypto
+package crypto_coinpaprika
 
 type Quote struct {
 	Price float64 `json:"price"`
